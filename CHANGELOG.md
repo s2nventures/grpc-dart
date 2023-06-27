@@ -1,4 +1,20 @@
-## 3.1.1-dev
+## 3.2.3-wip
+
+* Add const constructor to `GrpcError` fixing #606.
+* Make `GrpcError` non-final to allow implementations.
+* Only send keepalive pings on open connections.
+
+## 3.2.2
+
+* Remove `base` qualifier on `ResponseStream`.
+* Add support for clients to send KEEPALIVE pings.
+
+## 3.2.1
+
+* `package:http` now supports more versions: `>=0.13.0 <2.0.0`. 
+* `package:protobuf` new supports more versions: `>=2.0.0 <4.0.0`.
+
+## 3.2.0
 
 * `ChannelOptions` now exposes `connectTimeout`, which is used on the 
   socket connect. This is used to specify the maximum allowed time to wait
@@ -8,6 +24,10 @@
 * Require Dart 2.17 or greater.
 * Fix issue [#51](https://github.com/grpc/grpc-dart/issues/51), add support for custom error handling.
 * Expose client IP address to server 
+* Add a `channelShutdownHandler` argument to `ClientChannel` and the subclasses.
+  This callback can be used to react to channel shutdown or termination.
+* Export the `Code` protobuf enum from the `grpc.dart` library.
+* Require Dart 3.0.0 or greater.
 
 ## 3.1.0
 

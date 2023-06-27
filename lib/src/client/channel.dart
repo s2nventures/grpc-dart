@@ -14,6 +14,7 @@
 // limitations under the License.
 
 import 'dart:async';
+import 'dart:developer';
 
 import '../shared/profiler.dart';
 import '../shared/status.dart';
@@ -55,8 +56,10 @@ abstract class ClientChannelBase implements ClientChannel {
   bool _isShutdown = false;
   final StreamController<ConnectionState> _connectionStateStreamController =
       StreamController.broadcast();
+  final void Function()? _channelShutdownHandler;
 
-  ClientChannelBase();
+  ClientChannelBase({void Function()? channelShutdownHandler})
+      : _channelShutdownHandler = channelShutdownHandler;
 
   @override
   Future<void> shutdown() async {
@@ -66,6 +69,7 @@ abstract class ClientChannelBase implements ClientChannel {
       await _connection.shutdown();
       await _connectionStateStreamController.close();
     }
+    _channelShutdownHandler?.call();
   }
 
   @override
@@ -75,6 +79,7 @@ abstract class ClientChannelBase implements ClientChannel {
       await _connection.terminate();
       await _connectionStateStreamController.close();
     }
+    _channelShutdownHandler?.call();
   }
 
   ClientConnection createConnection();
@@ -105,7 +110,7 @@ abstract class ClientChannelBase implements ClientChannel {
         requests,
         options,
         isTimelineLoggingEnabled
-            ? timelineTaskFactory(filterKey: clientTimelineFilterKey)
+            ? TimelineTask(filterKey: clientTimelineFilterKey)
             : null);
     getConnection().then((connection) {
       if (call.isCancelled) return;
