@@ -76,6 +76,9 @@ class FakeChannelOptions implements ChannelOptions {
   BackoffStrategy backoffStrategy = testBackoff;
   @override
   CodecRegistry codecRegistry = CodecRegistry.empty();
+
+  @override
+  ClientKeepAliveOptions get keepAlive => const ClientKeepAliveOptions();
 }
 
 class FakeChannel extends ClientChannel {
